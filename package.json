@@ -1,0 +1,23 @@
+{
+  "name": "eco-de-vesperia",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Eco de Vesperia — Holograma Alienígena (Taller Semana 3, Three.js)",
+  "author": "Valery Nickol Rosero Molina",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Valery-Rosero/Multimedia_TallerSemana3.git"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "three": "^0.186.0"
+  }
+}

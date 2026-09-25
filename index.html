@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Valery Nickol Rosero Molina" />
+    <title>Eco de Vesperia — Holograma Alienígena</title>
+    <!-- Tipografias (si no hay conexion, style.css tiene alternativas locales) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Lienzo WebGL: lo inyecta main.js -->
+    <div id="lienzo"></div>
+
+    <!-- ============ PANTALLA DE ARRANQUE ============ -->
+    <!-- Necesaria para obtener el gesto de usuario que exigen los
+         navegadores antes de reproducir video y audio. -->
+    <div id="arranque">
+      <div class="arranque-caja">
+        <svg class="ornamento" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="54" class="orbita" />
+          <ellipse cx="60" cy="60" rx="54" ry="18" class="orbita girar" />
+          <ellipse cx="60" cy="60" rx="18" ry="54" class="orbita girar-inverso" />
+          <path d="M60 30 L78 60 L60 90 L42 60 Z" class="gema" />
+          <circle cx="60" cy="60" r="5" class="centro" />
+        </svg>
+        <p class="kicker">Registro de la sonda HELIOS-7 · Planeta Vesperia</p>
+        <h1>Eco de<br /><span>Vesperia</span></h1>
+        <p class="glifos-deco" aria-hidden="true">⟟⍜ ⏃⌇ ⟒⌖ ⏚⟟⎍⟟ ⋏⍜⏁ ⌇⍜⌰⍜</p>
+        <p class="sinopsis">
+          En la llanura violeta de Vesperia, bajo un gigante gaseoso, una civilización
+          desaparecida dejó un <strong>altar de proyección</strong>. Lleva mil años
+          guardando una transmisión que nadie ha visto.
+          <br /><br />
+          Nuestra sonda se estrelló a su lado y capta un eco débil de la señal.
+          Sincroniza el altar y deja que <em>el mensaje se materialice</em>.
+        </p>
+
+        <div id="barra-carga"><span id="barra-carga-relleno"></span></div>
+        <p id="estado-carga">Captando la señal del altar…</p>
+
+        <button id="btn-iniciar" disabled>SINCRONIZAR EL ALTAR</button>
+        <p class="pista">Pulsa el botón o la tecla <kbd>Espacio</kbd> · usa auriculares para notar el audio 3D</p>
+        <p class="firma-arranque">Operadora de la misión · <span>Valery Nickol Rosero Molina</span></p>
+      </div>
+    </div>
+
+    <!-- ============ HUD ============ -->
+    <div id="hud" class="oculto">
+      <!-- Estado de la señal -->
+      <div class="panel" id="panel-titulo">
+        <p class="panel-tag">Altar de Vesperia</p>
+        <div class="fila">
+          <span class="etiqueta">SINCRONÍA</span>
+          <div class="medidor"><span id="medidor-energia"></span></div>
+          <span class="valor" id="valor-energia">0%</span>
+        </div>
+        <div class="fila">
+          <span class="etiqueta">FASE</span>
+          <span class="valor valor-texto" id="valor-fase">SIN SEÑAL</span>
+        </div>
+        <div class="fila">
+          <span class="etiqueta">MENSAJE</span>
+          <div class="medidor fino"><span id="medidor-memoria"></span></div>
+          <span class="valor" id="valor-memoria">—</span>
+        </div>
+        <p class="panel-estado" id="estado-sistema">SEÑAL EN REPOSO</p>
+      </div>
+
+      <!-- Comprobacion del audio espacial -->
+      <div class="panel" id="panel-audio">
+        <p class="panel-tag">Audio espacial · PositionalAudio</p>
+        <div class="fila">
+          <span class="etiqueta">DISTANCIA</span>
+          <span class="valor" id="valor-distancia">—</span>
+        </div>
+        <div class="fila">
+          <span class="etiqueta">VOLUMEN</span>
+          <div class="medidor"><span id="medidor-volumen"></span></div>
+          <span class="valor" id="valor-volumen">0%</span>
+        </div>
+        <div class="fila">
+          <label class="etiqueta" for="deslizador-volumen">MAESTRO</label>
+          <input id="deslizador-volumen" type="range" min="0" max="100" value="100" />
+        </div>
+        <p class="sub-tag">Espectro que llega a tus oídos</p>
+        <canvas id="espectro" width="480" height="84"></canvas>
+        <p class="ayuda">
+          Acércate, aléjate o rodea el altar: el volumen y el espectro cambian
+          según tu posición, porque el sonido nace en el centro del holograma.
+        </p>
+      </div>
+
+      <!-- Controles -->
+      <div class="panel" id="panel-controles">
+        <p class="panel-tag">Controles</p>
+        <ul>
+          <li><kbd>Espacio</kbd> sincronizar / cortar señal</li>
+          <li><kbd>Clic</kbd> sobre el holograma · también</li>
+          <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> desplazar la cámara</li>
+          <li><kbd>Q</kbd><kbd>E</kbd> bajar / subir · <kbd>Shift</kbd> rápido</li>
+          <li><kbd>Arrastrar</kbd> orbitar · <kbd>Rueda</kbd> acercar</li>
+          <li><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> vistas · <kbd>R</kbd> inicial</li>
+          <li><kbd>C</kbd> órbita automática · <kbd>M</kbd> silenciar</li>
+          <li><kbd>H</kbd> ocultar la interfaz</li>
+        </ul>
+      </div>
+
+      <!-- Bitacora narrativa -->
+      <p id="bitacora" aria-live="polite"></p>
+      <p id="aviso-vista"></p>
+
+      <!-- Barra inferior -->
+      <div id="barra-inferior">
+        <button id="btn-play" class="accion">
+          <span class="icono">◈</span><span id="btn-play-texto">SINCRONIZAR</span>
+        </button>
+        <button id="btn-reiniciar" class="accion secundaria">
+          <span class="icono">↺</span>REINICIAR TRANSMISIÓN
+        </button>
+        <button id="btn-vista" class="accion secundaria">
+          <span class="icono">◐</span>CAMBIAR VISTA
+        </button>
+        <button id="btn-orbita" class="accion secundaria">
+          <span class="icono">◎</span>ÓRBITA AUTOMÁTICA
+        </button>
+      </div>
+
+      <!-- Telemetria -->
+      <div id="fps">60 FPS</div>
+    </div>
+
+    <!-- Etiqueta que sigue al cursor sobre el holograma -->
+    <div id="pista-cursor"></div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,3 @@
+# Finales de linea correctos para los lanzadores en cualquier sistema
+*.bat text eol=crlf
+*.sh  text eol=lf

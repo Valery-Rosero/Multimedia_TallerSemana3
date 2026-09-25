@@ -10,6 +10,8 @@
   },
   "type": "module",
   "scripts": {
+    "prestart": "npm install --no-audit --no-fund --loglevel=error",
+    "start": "vite --open",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

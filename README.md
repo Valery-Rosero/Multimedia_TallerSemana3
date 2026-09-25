@@ -25,15 +25,29 @@ de la sonda gira hacia la luz. Todo late **al ritmo real del audio**.
 
 ## Cómo ejecutarlo
 
+Solo necesitas tener [Node.js](https://nodejs.org) instalado (versión LTS).
+Después basta **un solo paso**:
+
+| Opción | Cómo |
+|---|---|
+| **Doble clic** (Windows) | Abre `iniciar.bat` |
+| **Terminal** (macOS / Linux) | Ejecuta `./iniciar.sh` |
+| **Un comando** (cualquier sistema) | `npm start` |
+
+Las tres opciones hacen lo mismo: instalan las dependencias automáticamente
+(solo tarda la primera vez), levantan el servidor y **abren la escena en el
+navegador**. Después solo hay que pulsar **SINCRONIZAR EL ALTAR**
+(mejor con auriculares, para notar el audio 3D).
+
+<details>
+<summary>Otros comandos (desarrollo)</summary>
+
 ```bash
-npm install
-npm run dev      # servidor de desarrollo
+npm run dev      # servidor de desarrollo sin abrir el navegador
 npm run build    # compilación de producción en dist/
 npm run preview  # previsualizar la compilación
 ```
-
-Abre la URL que imprime Vite y pulsa **SINCRONIZAR EL ALTAR**
-(mejor con auriculares, para notar el audio 3D).
+</details>
 
 ---
 
@@ -160,6 +174,7 @@ Medición real de la escena, con los datos que muestra el HUD:
 
 ```
 codigo-fuente/
+├─ iniciar.bat / .sh      arranque en un solo paso
 ├─ index.html              Pantalla de arranque + HUD
 ├─ public/assets/
 │  ├─ video.mp4            la transmisión de Vesperia
